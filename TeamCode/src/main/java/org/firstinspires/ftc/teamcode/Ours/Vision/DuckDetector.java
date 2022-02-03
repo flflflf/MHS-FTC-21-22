@@ -25,11 +25,19 @@ public class DuckDetector extends OpenCvPipeline {
     public Scalar lowerHSV = new Scalar(19,89,172); // the lower limit for the detection (tune this for camera)
     public Scalar upperHSV = new Scalar(59,250,250); // upper limit also tune this with the camera
 
-    public double yAxisThreshHold = 100; // the upper threshold so anything above this imaginary line is not being seen by the pipeline
+    public double yAxisTop = 40; // the upper threshold so anything above this imaginary line is not seen by the pipeline
+
+    public double yAxisBot = 70; // the lower threshold so anything below this imaginary line is not seen by the pipeline
+
+    public double maxArea = 2000; //the max area a counter can be so anything larger wont effect the duckPos
+
+    public double minArea = 1500; // the min area like above but min
 
     public double blurConstant = 1; // change this to change the Gaussian blur amount
 
     public double dilationConstant = 2; // tune
+
+
 
     int duckPosition = 0; // far left = 0, middle 1 , far right 2
 
@@ -75,7 +83,7 @@ public class DuckDetector extends OpenCvPipeline {
         for(MatOfPoint contour: contoursList) {
             Rect rect = Imgproc.boundingRect(contour);
 
-            if (rect.y >= yAxisThreshHold) {
+            if (rect.y >= yAxisTop && rect.y <= yAxisBot && rect.area() >= minArea && rect.area() <= maxArea) {
                 Imgproc.rectangle(contoursOnFrameMat, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2);
                 Imgproc.putText(contoursOnFrameMat, String.valueOf(rect.x), rect.tl(), 0, 0.5, new Scalar(2500, 255, 255)); // prints x value
                 //x value for left
