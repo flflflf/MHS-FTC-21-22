@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MHS-FTC-21-22.iml" filepath="$PROJECT_DIR$/.idea/modules/MHS-FTC-21-22.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/MHS-FTC-21-22.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/MHS-FTC-21-22.FtcRobotController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MeepMeep Trajectory testing/MHS-FTC-21-22.MeepMeep_Trajectory_testing.iml" filepath="$PROJECT_DIR$/.idea/modules/MeepMeep Trajectory testing/MHS-FTC-21-22.MeepMeep_Trajectory_testing.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/MHS-FTC-21-22.TeamCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/MHS-FTC-21-22.TeamCode.iml" />
     </modules>
   </component>
