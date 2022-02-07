@@ -42,7 +42,6 @@ public class ComputerVisionTest extends LinearOpMode {
 
         while (opModeIsActive()){
             int pos = detector.getDuckPosition(); // gets the pos of the duck
-            int num = detector.getNumContoursFound();
 
             if(pos == 0){
                 telemetry.addData("Duck on the right", pos);
@@ -59,8 +58,8 @@ public class ComputerVisionTest extends LinearOpMode {
             telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
             telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
-            telemetry.addData("there are this many 'ducks' found", num);
             telemetry.update();
+            sleep(50);
         }
     }
 }
