@@ -12,7 +12,8 @@ public class red_right_team {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(52.48180821614297, 52.48180821614297, Math.toRadians(184.02607784577722), Math.toRadians(184.02607784577722), 16.34)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-35, -62, Math.toRadians(90)))
+                                .forward(2)
                                 .strafeLeft(10)
                                 .addDisplacementMarker(() -> {
                                     //spin the thing
