@@ -9,8 +9,8 @@ public class TeleOp extends LinearOpMode {
     static DcMotor BL;
     static DcMotor FR;
     static DcMotor BR;
-    static DcMotorSimple INTAKE;
-    static DcMotorSimple Spinner;
+    static DcMotor INTAKE;
+    static DcMotor Spinner;
     double speed = 1;
 
     @Override
@@ -20,16 +20,16 @@ public class TeleOp extends LinearOpMode {
         FR = hardwareMap.get(DcMotor.class, "FrontR");
         BR = hardwareMap.get(DcMotor.class, "BackR");
 
-        INTAKE = hardwareMap.get(DcMotorSimple.class, "IntakeMotor");
-        Spinner = hardwareMap.get(DcMotorSimple.class, "SpinnerMotor");
+        INTAKE = hardwareMap.get(DcMotor.class, "IntakeMotor");
+        Spinner = hardwareMap.get(DcMotor.class, "SpinnerMotor");
 
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        FL.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
 
         while (opModeIsActive()){
@@ -39,11 +39,16 @@ public class TeleOp extends LinearOpMode {
 
             telemetry.addData("X", x);
             telemetry.addData("Y", y);
+            telemetry.addData("A pressed", gamepad2.a);
             telemetry.update();
 
-            move(x, y, r, speed);
-            if(gamepad1.right_bumper){INTAKE.setPower(-1);}else{INTAKE.setPower(0);}  //intake motor control
-            if(gamepad2.a){Spinner.setPower(0.5);}else{Spinner.setPower(0);} //spinner motor control
+          //  move(x, y, r, speed);
+            if(gamepad1.right_bumper){INTAKE.setPower(1);}else{INTAKE.setPower(0);}  //intake motor control
+            if(gamepad2.a){
+                Spinner.setPower(1);
+            }else{
+                Spinner.setPower(0);
+            } //spinner motor control
         }
     }
 
