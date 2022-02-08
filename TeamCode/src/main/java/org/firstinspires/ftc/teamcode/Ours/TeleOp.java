@@ -10,7 +10,7 @@ public class TeleOp extends LinearOpMode {
     static DcMotor FR;
     static DcMotor BR;
     static DcMotorSimple INTAKE;
-    static CRServo SPINNER;
+    //static CRServo SPINNER;
     double speed = 1;
 
     @Override
@@ -21,7 +21,7 @@ public class TeleOp extends LinearOpMode {
         BR = hardwareMap.get(DcMotor.class, "BackR");
 
         INTAKE = hardwareMap.get(DcMotorSimple.class, "IntakeMotor");
-        SPINNER = hardwareMap.get(CRServo.class, "SpinnerMotor");
+     //   SPINNER = hardwareMap.get(CRServo.class, "SpinnerMotor");
 
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -43,7 +43,7 @@ public class TeleOp extends LinearOpMode {
 
             move(x, y, r, speed);
             if(gamepad1.right_bumper){INTAKE.setPower(-1);}else{INTAKE.setPower(0);}  //intake motor control
-            if(gamepad2.a){SPINNER.setPower(1);}else{SPINNER.setPower(0);} //spinner motor control
+           // if(gamepad2.a){SPINNER.setPower(1);}else{SPINNER.setPower(0);} //spinner motor control
         }
     }
 
