@@ -15,13 +15,7 @@ public class AutoTest extends LinearOpMode {
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPos)
                 .forward(2)
                 .strafeLeft(10)
-                .addDisplacementMarker(() -> {
-                        //spin the thing
-                })
                 .lineToSplineHeading(new Pose2d(-24, -37, Math.toRadians(45)))
-                .addTemporalMarker(() -> {
-                        //deliver pre loaded block
-                })
                 .lineToLinearHeading(new Pose2d(-60, -35, Math.toRadians(0)))
                 .build();
     }
