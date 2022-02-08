@@ -1,17 +1,16 @@
 package org.firstinspires.ftc.teamcode.Ours;
 
-import com.qualcomm.robotcore.eventloop.opmode.*;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
-@ com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
-public class TeleOp extends LinearOpMode {
+@ com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp2")
+public class TeleOpBackup extends LinearOpMode {
     static DcMotor FL;
     static DcMotor BL;
     static DcMotor FR;
     static DcMotor BR;
     static DcMotor INTAKE;
     static DcMotor Spinner;
-    static Servo bucketServo;
     double speed = 1;
 
     @Override
@@ -45,23 +44,12 @@ public class TeleOp extends LinearOpMode {
 
             move(x, y, r, speed);
 
-            if(gamepad1.right_bumper){ // intake motor control
-                INTAKE.setPower(1);
-            }else{
-                INTAKE.setPower(0);
-            }
-
-            if(gamepad1.left_bumper){ // spinner motor control
+            if(gamepad1.right_bumper){INTAKE.setPower(1);}else{INTAKE.setPower(0);}  //intake motor control
+            if(gamepad1.left_bumper){
                 Spinner.setPower(.65);
             }else{
                 Spinner.setPower(0);
-            }
-
-            if(gamepad2.a) {
-                bucketServo.setPosition(0.5); // bucket motor control
-            }else{
-                bucketServo.setPosition(0);
-            }
+            } //spinner motor control
         }
     }
 
