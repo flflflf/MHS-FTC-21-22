@@ -12,13 +12,14 @@ public class AutoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(startPos);
+        waitForStart();
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPos)
                 .forward(2)
                 .strafeLeft(10)
                 .lineToSplineHeading(new Pose2d(-24, -37, Math.toRadians(45)))
                 .lineToLinearHeading(new Pose2d(-60, -35, Math.toRadians(0)))
                 .build();
-        waitForStart();
         drive.followTrajectorySequence(trajSeq);
     }
 }

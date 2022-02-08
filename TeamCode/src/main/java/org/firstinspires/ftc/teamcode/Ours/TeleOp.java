@@ -42,10 +42,11 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("A pressed", gamepad2.a);
             telemetry.update();
 
-          //  move(x, y, r, speed);
+            move(x, y, r, speed);
+
             if(gamepad1.right_bumper){INTAKE.setPower(1);}else{INTAKE.setPower(0);}  //intake motor control
-            if(gamepad2.a){
-                Spinner.setPower(1);
+            if(gamepad1.left_bumper){
+                Spinner.setPower(.65);
             }else{
                 Spinner.setPower(0);
             } //spinner motor control
