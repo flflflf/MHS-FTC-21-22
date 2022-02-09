@@ -42,6 +42,7 @@ public class TeleOp extends LinearOpMode {
         waitForStart();
 
         trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // resets the encoder position to 0 so the position of the bucket thing should be at the designated start position or it can break
+
         while (opModeIsActive()){
 
             telemetry.addData("X", -gamepad1.left_stick_y);
@@ -60,6 +61,12 @@ public class TeleOp extends LinearOpMode {
                 spinner.setPower(.65);
             }else{
                 spinner.setPower(0);
+            }
+
+            if(gamepad2.a){
+                bucketServo.setPosition(0.6);
+            }else{
+                bucketServo.setPosition(0);
             }
 
             if(gamepad2.dpad_down){
