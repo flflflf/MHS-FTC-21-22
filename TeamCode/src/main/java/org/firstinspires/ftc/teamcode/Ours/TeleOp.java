@@ -99,7 +99,7 @@ public class TeleOp extends LinearOpMode {
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed); this call might need to be here since nested for loops so the main while loop might stop meaning that there wont be any control of the robot 
+            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed); this call might need to be here since nested for loops so the main while loop might stop meaning that there wont be any control of the robot
         }
 
         trackMotor.setPower(0);
