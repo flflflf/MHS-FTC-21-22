@@ -41,6 +41,6 @@ public class ticksperinch extends OpMode {
             BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             average = 0;
-        } else{}
+        }
     }
 }

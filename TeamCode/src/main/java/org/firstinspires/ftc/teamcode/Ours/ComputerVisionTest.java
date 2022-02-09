@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Ours.Vision.CupDetector;
+import org.firstinspires.ftc.teamcode.Ours.Vision.DuckDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -12,7 +12,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous(name = "ducktest2")
 public class ComputerVisionTest extends LinearOpMode {
     OpenCvCamera webcam; // webcam object
-    CupDetector detector = new CupDetector(telemetry);
+    DuckDetector detector = new DuckDetector(telemetry);
 
     @SuppressLint("DefaultLocale")
     @Override
