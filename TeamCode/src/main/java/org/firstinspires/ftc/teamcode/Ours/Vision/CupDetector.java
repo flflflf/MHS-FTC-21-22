@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DuckDetector extends OpenCvPipeline {
+public class CupDetector extends OpenCvPipeline {
 
     Mat HSVMat = new Mat();
     Mat contoursOnFrameMat = new Mat();
@@ -38,12 +38,12 @@ public class DuckDetector extends OpenCvPipeline {
 
     public double dilationConstant = 2; // tune
 
-    int duckPosition; // far left = 0, middle 1 , far right 2
+    int duckPosition = -1; // far left = 0, middle 1 , far right 2
 
     Telemetry telemetryOpenCV = null;
 
     // constructor
-    public DuckDetector(Telemetry OpModeTelemetry) {
+    public CupDetector(Telemetry OpModeTelemetry) {
         telemetryOpenCV = OpModeTelemetry;
     }
 
@@ -64,12 +64,7 @@ public class DuckDetector extends OpenCvPipeline {
 
         // adds blur effect to the image to help image processing
         Imgproc.GaussianBlur(HSVMat, HSVMat, kernalSize, 0);
-
-        Imgproc.morphologyEx(HSVMat,HSVMat, Imgproc.MORPH_OPEN, new Mat());
-        Imgproc.morphologyEx(HSVMat,HSVMat, Imgproc.MORPH_CLOSE, new Mat());
-
         Size kernalRectangleSize = new Size(2 * dilationConstant + 1, 2 * dilationConstant + 1);
-
 
         Mat kernal = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kernalRectangleSize); // dialution
         Imgproc.dilate(HSVMat, HSVMat, kernal);
@@ -82,34 +77,30 @@ public class DuckDetector extends OpenCvPipeline {
 
         for (MatOfPoint contour : contoursList) {
             Rect rect = Imgproc.boundingRect(contour);
-            //telemetryOpenCV.addData("X val", rect.x);
-            if (rect.y >= yAxisTop && rect.y <= yAxisBot ) {
-                Imgproc.rectangle(HSVMat, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2);
+            if (rect.area() > 1000) {
+                Imgproc.rectangle(contoursOnFrameMat, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2);
                 Imgproc.putText(contoursOnFrameMat, String.valueOf(rect.x), rect.tl(), 0, 0.5,
                         new Scalar(2500, 255, 255)); // prints x value
                 // x value for left
-
-                if (rect.x <= 75 && rect.area() > minArea) {
-                    duckPosition = 0;
-                    telemetryOpenCV.addLine("Duck is on the left");
-                    telemetryOpenCV.update();
-                } else if (rect.x > 76 && rect.x <= 150) {
+                if (rect.x <= 100 && numContoursFound > 0) {
                     duckPosition = 1;
                     telemetryOpenCV.addLine("Duck is in the middle");
                     telemetryOpenCV.update();
-                } else {
+                } else if (rect.x >= 200 && numContoursFound > 0) {
                     duckPosition = 2;
-                    telemetryOpenCV.addLine("Duck is to the right");
+                    telemetryOpenCV.addLine("Duck is on the right");
                     telemetryOpenCV.update();
+                }
 
-                }
-                if(duckPosition == -1){
-                    telemetryOpenCV.addLine("No Duck found");
-                    telemetryOpenCV.update();
-                }
             }
-        }
 
-        return HSVMat;
+        }
+        if (numContoursFound == 0) {
+            duckPosition = 0;
+            telemetryOpenCV.addLine("Duck is on the left ");
+        }
+        telemetryOpenCV.addData("countors found", numContoursFound);
+        telemetryOpenCV.update();
+        return contoursOnFrameMat;
     }
 }

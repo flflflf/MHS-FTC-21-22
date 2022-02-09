@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Ours.Vision.DuckDetector;
+import org.firstinspires.ftc.teamcode.Ours.Vision.CupDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous
 public class Auto extends LinearOpMode {
     OpenCvCamera webcam; // webcam object
-    DuckDetector detector = new DuckDetector(telemetry); // duck pos object
+    CupDetector detector = new CupDetector(telemetry); // duck pos object
 
     DcMotor FL = null;
     DcMotor FR  = null;
