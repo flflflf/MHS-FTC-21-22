@@ -73,14 +73,6 @@ public class TeleOp extends LinearOpMode {
             if(gamepad2.dpad_up){
                 OuttakeUpperPos(telemetry, gamepad1);
             }
-
-            if(gamepad2.a){
-                OUTTAKE_DUMP.setPosition(.6);
-            }else{
-                OUTTAKE_DUMP.setPosition(0);
-            }
-
-            OUTTAKE.setPower(gamepad2.right_stick_y/10);
         }
     }
 
