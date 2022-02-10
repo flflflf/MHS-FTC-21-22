@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "ducktest2")
+@Autonomous(name = "visionTest")
 public class ComputerVisionTest extends LinearOpMode {
     OpenCvCamera webcam; // webcam object
     CupDetector detector = new CupDetector(telemetry);
@@ -20,7 +20,6 @@ public class ComputerVisionTest extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         webcam.setPipeline(detector);
-
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -34,18 +33,16 @@ public class ComputerVisionTest extends LinearOpMode {
 
         });
 
-   /*while(!opModeIsActive()){
-       telemetry.addData("in innit loop",0);
-        }*/
-
-        waitForStart();
-
-        while (opModeIsActive()){
-            int pos = detector.getDuckPosition(); // gets the pos of the duck
+   while(!opModeIsActive() && !isStopRequested()){
+            int pos = detector.getCupPosition(); // gets the pos of the duck
             telemetry.addData("duck pos", pos);
             //adds a bunch of data to benchmark pipeline and controller hub
             telemetry.update();
-            sleep(500);
+            sleep(100);        }
+        waitForStart();
+        int snapshot = detector.getCupPosition();
+        while (opModeIsActive()){
+            telemetry.addData("snapshot analysis", snapshot);
         }
     }
 }

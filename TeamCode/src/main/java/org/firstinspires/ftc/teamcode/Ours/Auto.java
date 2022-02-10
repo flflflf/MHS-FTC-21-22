@@ -57,7 +57,7 @@ public class Auto extends LinearOpMode {
         });
 
         while (!opModeIsActive()){ // the innit stage
-            telemetry.addData("Duck Position",detector.getDuckPosition());
+            telemetry.addData("Duck Position",detector.getCupPosition());
             telemetry.update();
         }
     waitForStart();

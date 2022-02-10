@@ -22,8 +22,8 @@ public class CupDetector extends OpenCvPipeline {
 
     int numContoursFound = 0;
 
-    public Scalar lowerHSV = new Scalar(0, 59.5, 148.8); // the lower limit for the detection (tune this for camera)
-    public Scalar upperHSV = new Scalar(133.2, 161.5, 250); // upper limit also tune this with the camera
+    public Scalar lowerHSV = new Scalar(0, 42.5, 172.8); // the lower limit for the detection (tune this for camera)
+    public Scalar upperHSV = new Scalar(120.4, 255, 255); // upper limit also tune this with the camera
 
     public double yAxisTop = 40; // the upper threshold so anything above this imaginary line is not being seen
     // by the pipeline
@@ -49,7 +49,7 @@ public class CupDetector extends OpenCvPipeline {
         telemetryOpenCV = OpModeTelemetry;
     }
 
-    public int getDuckPosition() {
+    public int getCupPosition() {
         synchronized (sync) {
             return duckPosition;
         }
@@ -88,11 +88,11 @@ public class CupDetector extends OpenCvPipeline {
                     // x value for left
                     if (rect.x <= 130 && numContoursFound > 0) {
                         duckPosition = 1;
-                        telemetryOpenCV.addLine("Duck is in the middle");
+                        telemetryOpenCV.addLine("cup is in the middle");
                         // telemetryOpenCV.update();
                     } else if (rect.x >= 180 && numContoursFound > 0) {
                         duckPosition = 2;
-                        telemetryOpenCV.addLine("Duck is on the right");
+                        telemetryOpenCV.addLine("cup is on the right");
                         // telemetryOpenCV.update();
                     }
 
@@ -101,11 +101,12 @@ public class CupDetector extends OpenCvPipeline {
             }
             if (numContoursFound == 0) {
                 duckPosition = 0;
-                telemetryOpenCV.addLine("Duck is on the left ");
+                telemetryOpenCV.addLine("cup is on the left ");
             }
         }
-       telemetryOpenCV.addData("countors found", numContoursFound);
-        telemetryOpenCV.update();
+        telemetryOpenCV.addData("countors found", numContoursFound);
+        telemetryOpenCV.addData("cup positon num", duckPosition);
+       // telemetryOpenCV.update();
         return contoursOnFrameMat;
     }
 }
