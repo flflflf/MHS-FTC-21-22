@@ -137,20 +137,37 @@ public class TeleOp extends LinearOpMode {
         trackMotor.setPower(0);
     }
 
-    private static void OuttakeLoadingPos(Telemetry telemetry, Gamepad gamepad1){
+    private static void LoadingPos(Telemetry telemetry, Gamepad gamepad1){
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        //trackMotor.setTargetPosition(???); find the correct value
+        trackMotor.setTargetPosition(0);
 
         trackMotor.setPower(.1);
 
-        //bucketServo.setPosition(???); set to whatever position is
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+            //bucketServo.setPosition(horizontal);
+
+
         }
 
         trackMotor.setPower(0);
+    }
+
+    private static void transferPos(Telemetry telemetry, Gamepad gamepad1){
+        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        trackMotor.setTargetPosition(0);
+
+        trackMotor.setPower(.1);
+
+
+        while (trackMotor.isBusy()){
+            telemetry.addData("current pos", trackMotor.getCurrentPosition());
+            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+            // bucketServo.setPosition(upright);
+        }
     }
 }
