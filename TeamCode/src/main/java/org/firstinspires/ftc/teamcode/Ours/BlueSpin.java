@@ -54,7 +54,6 @@ public class BlueSpin extends LinearOpMode {
             //bucketServo.setPosition(upright);
             int pos = detector.getCupPosition(); // gets the pos of the duck
             telemetry.addData("duck pos", pos);
-            //adds a bunch of data to benchmark pipeline and controller hub
             telemetry.update();
             sleep(100);
         }
