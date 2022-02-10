@@ -22,8 +22,8 @@ public class CupDetector extends OpenCvPipeline {
 
     int numContoursFound = 0;
 
-    public Scalar lowerHSV = new Scalar(19, 89, 172); // the lower limit for the detection (tune this for camera)
-    public Scalar upperHSV = new Scalar(59, 250, 250); // upper limit also tune this with the camera
+    public Scalar lowerHSV = new Scalar(0, 59.5, 148.8); // the lower limit for the detection (tune this for camera)
+    public Scalar upperHSV = new Scalar(133.2, 161.5, 250); // upper limit also tune this with the camera
 
     public double yAxisTop = 40; // the upper threshold so anything above this imaginary line is not being seen
     // by the pipeline
@@ -38,7 +38,9 @@ public class CupDetector extends OpenCvPipeline {
 
     public double dilationConstant = 2; // tune
 
-    int duckPosition = -1; // far left = 0, middle 1 , far right 2
+    int duckPosition = 0; // far left = 0, middle 1 , far right 2
+
+    private final Object sync = new Object();
 
     Telemetry telemetryOpenCV = null;
 
@@ -48,7 +50,9 @@ public class CupDetector extends OpenCvPipeline {
     }
 
     public int getDuckPosition() {
-        return duckPosition;
+        synchronized (sync) {
+            return duckPosition;
+        }
     }
 
     @Override
@@ -74,32 +78,33 @@ public class CupDetector extends OpenCvPipeline {
         numContoursFound = contoursList.size(); // finds the amount of contours made
 
         input.copyTo(contoursOnFrameMat);
+        synchronized (sync) {
+            for (MatOfPoint contour : contoursList) {
+                Rect rect = Imgproc.boundingRect(contour);
+                if (rect.area() > 1000) {
+                    Imgproc.rectangle(contoursOnFrameMat, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2);
+                    Imgproc.putText(contoursOnFrameMat, String.valueOf(rect.x), rect.tl(), 0, 0.5,
+                            new Scalar(2500, 255, 255)); // prints x value
+                    // x value for left
+                    if (rect.x <= 130 && numContoursFound > 0) {
+                        duckPosition = 1;
+                        telemetryOpenCV.addLine("Duck is in the middle");
+                        // telemetryOpenCV.update();
+                    } else if (rect.x >= 180 && numContoursFound > 0) {
+                        duckPosition = 2;
+                        telemetryOpenCV.addLine("Duck is on the right");
+                        // telemetryOpenCV.update();
+                    }
 
-        for (MatOfPoint contour : contoursList) {
-            Rect rect = Imgproc.boundingRect(contour);
-            if (rect.area() > 1000) {
-                Imgproc.rectangle(contoursOnFrameMat, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2);
-                Imgproc.putText(contoursOnFrameMat, String.valueOf(rect.x), rect.tl(), 0, 0.5,
-                        new Scalar(2500, 255, 255)); // prints x value
-                // x value for left
-                if (rect.x <= 100 && numContoursFound > 0) {
-                    duckPosition = 1;
-                    telemetryOpenCV.addLine("Duck is in the middle");
-                    telemetryOpenCV.update();
-                } else if (rect.x >= 200 && numContoursFound > 0) {
-                    duckPosition = 2;
-                    telemetryOpenCV.addLine("Duck is on the right");
-                    telemetryOpenCV.update();
                 }
 
             }
-
+            if (numContoursFound == 0) {
+                duckPosition = 0;
+                telemetryOpenCV.addLine("Duck is on the left ");
+            }
         }
-        if (numContoursFound == 0) {
-            duckPosition = 0;
-            telemetryOpenCV.addLine("Duck is on the left ");
-        }
-        telemetryOpenCV.addData("countors found", numContoursFound);
+       telemetryOpenCV.addData("countors found", numContoursFound);
         telemetryOpenCV.update();
         return contoursOnFrameMat;
     }

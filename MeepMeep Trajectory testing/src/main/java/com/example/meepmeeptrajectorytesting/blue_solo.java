@@ -7,21 +7,25 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class blue_solo {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(600);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(52.48180821614297, 52.48180821614297, Math.toRadians(184.02607784577722), Math.toRadians(184.02607784577722), 16.34)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-35, -60, Math.toRadians(90)))
-                                .strafeLeft(10)
+                        drive.trajectorySequenceBuilder(new Pose2d(-35, 60, Math.toRadians(270)))
+                                .forward(3)
+                                .lineToLinearHeading(new Pose2d(-50,60,Math.toRadians(180)))
+                                .back(5)
                                 .addDisplacementMarker(() -> {
                                     //spin the thing
                                 })
-                                .lineToSplineHeading(new Pose2d(-24,-37,Math.toRadians(45)))
+
+                                .splineToLinearHeading(new Pose2d(-11,42,Math.toRadians(270)),Math.toRadians(0))
                                 .addTemporalMarker(()->{
                                     //put the item to the right height
                                 })
-                                .lineToLinearHeading(new Pose2d(-60,-35,Math.toRadians(0)))
+                                .back(5)
+                                .lineToLinearHeading(new Pose2d(-60,35,Math.toRadians(0)))
                                 .build()
                         );
 

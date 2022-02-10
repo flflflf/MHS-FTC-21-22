@@ -42,24 +42,10 @@ public class ComputerVisionTest extends LinearOpMode {
 
         while (opModeIsActive()){
             int pos = detector.getDuckPosition(); // gets the pos of the duck
-
-            if(pos == 0){
-                telemetry.addData("Duck on the right", pos);
-            } else if (pos == 1){
-                telemetry.addData("duck is in the middle", pos);
-            }else{
-                telemetry.addData("duck is on the left", pos);
-            }
-
+            telemetry.addData("duck pos", pos);
             //adds a bunch of data to benchmark pipeline and controller hub
-            telemetry.addData("Frame Count", webcam.getFrameCount());
-            telemetry.addData("FPS", String.format("%.2f", webcam.getFps()));
-            telemetry.addData("Total frame time ms", webcam.getTotalFrameTimeMs());
-            telemetry.addData("Pipeline time ms", webcam.getPipelineTimeMs());
-            telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
-            telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
             telemetry.update();
-            sleep(50);
+            sleep(500);
         }
     }
 }
