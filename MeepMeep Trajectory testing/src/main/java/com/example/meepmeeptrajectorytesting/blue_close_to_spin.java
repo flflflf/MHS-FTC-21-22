@@ -22,12 +22,11 @@ public class blue_close_to_spin {
                                 .lineToSplineHeading(new Pose2d(-24,37,Math.toRadians(315)))                                .addTemporalMarker(()->{
                                     //put the item to the right height
                                 })
-                                .back(5)
                                 .lineToLinearHeading(new Pose2d(-60,35,Math.toRadians(0)))
                                 .build()
                         );
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_FREIGHTFRENZY_OFFICIAL)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_FREIGHTFRENZY_ADI_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)

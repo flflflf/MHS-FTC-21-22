@@ -35,10 +35,10 @@ public class TeleOp extends LinearOpMode {
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        trackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
+        trackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
 
         trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // resets the encoder position to 0 so the position of the bucket thing should be at the designated start position or it can break
@@ -64,8 +64,8 @@ public class TeleOp extends LinearOpMode {
                 spinner.setPower(0);
             }
 
-            if(gamepad2.dpad_down){
-                OuttakelowerPos(telemetry, gamepad1);
+            if(gamepad2.dpad_down) {
+                OuttakelowerPos(telemetry,gamepad1);
             }
 
             if(gamepad2.dpad_right){
@@ -74,6 +74,10 @@ public class TeleOp extends LinearOpMode {
 
             if(gamepad2.dpad_up){
                 OuttakeUpperPos(telemetry, gamepad1);
+            }
+
+            if(gamepad1.b){
+                OuttakelowerPos(telemetry,gamepad1);
             }
         }
     }
@@ -93,81 +97,91 @@ public class TeleOp extends LinearOpMode {
     }
 
     private static void OuttakelowerPos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+         trackMotor.setTargetPosition(500); //get this for the lower position tick amount
 
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
+        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         trackMotor.setPower(.1); // adjust this low for testing
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed); this call might need to be here since nested for loops so the main while loop might stop meaning that there wont be any control of the robot
+            telemetry.update();
         }
 
         trackMotor.setPower(0);
     }
 
     private static void OuttakemiddlePos(Telemetry telemetry, Gamepad gamepad1){
+        trackMotor.setTargetPosition(1000);
+
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
+          //get this for the lower position tick amount
 
-        trackMotor.setPower(.1); // adjust this low for testing
+        trackMotor.setPower(.2); // adjust this low for testing
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+            telemetry.update();
         }
+
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         trackMotor.setPower(0);
     }
 
     private static void OuttakeUpperPos(Telemetry telemetry, Gamepad gamepad1){
+        trackMotor.setTargetPosition(2150); //get this for the lower position tick amount
+
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
-
-        trackMotor.setPower(.1); // adjust this low for testing
+        trackMotor.setPower(.2); // adjust this low for testing
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);\
+            telemetry.update();
         }
-
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);
     }
 
     private static void LoadingPos(Telemetry telemetry, Gamepad gamepad1){
+        trackMotor.setTargetPosition(2000);
+
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        trackMotor.setTargetPosition(0);
-
-        trackMotor.setPower(.1);
+        trackMotor.setPower(.2);
 
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
             //bucketServo.setPosition(horizontal);
-
+            telemetry.update();
 
         }
-
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);
     }
 
     private static void transferPos(Telemetry telemetry, Gamepad gamepad1){
+        trackMotor.setTargetPosition(200);
+
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        trackMotor.setTargetPosition(0);
-
-        trackMotor.setPower(.1);
+        trackMotor.setPower(.2);
 
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
             // bucketServo.setPosition(upright);
+            telemetry.update();
         }
+        trackMotor.setPower(0);
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

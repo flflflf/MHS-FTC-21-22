@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.Ours;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@ com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp2")
+@Disabled
 public class TeleOpBackup extends LinearOpMode {
     static DcMotor FL;
     static DcMotor BL;

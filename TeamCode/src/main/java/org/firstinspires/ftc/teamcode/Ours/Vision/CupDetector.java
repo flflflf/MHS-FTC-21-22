@@ -104,8 +104,6 @@ public class CupDetector extends OpenCvPipeline {
                 telemetryOpenCV.addLine("cup is on the left ");
             }
         }
-        telemetryOpenCV.addData("countors found", numContoursFound);
-        telemetryOpenCV.addData("cup positon num", duckPosition);
        // telemetryOpenCV.update();
         return contoursOnFrameMat;
     }
