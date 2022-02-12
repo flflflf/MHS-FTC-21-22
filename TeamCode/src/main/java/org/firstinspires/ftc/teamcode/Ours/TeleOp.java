@@ -16,6 +16,7 @@ public class TeleOp extends LinearOpMode {
     static Servo bucketServo;
     static DcMotor trackMotor;
     static double speed = 1;
+    static int load = 1;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,12 +39,9 @@ public class TeleOp extends LinearOpMode {
 
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
-        trackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
 
-        trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // resets the encoder position to 0 so the position of the bucket thing should be at the designated start position or it can break
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         while (opModeIsActive()){
 
             telemetry.addData("X", -gamepad1.left_stick_y);
@@ -52,12 +50,6 @@ public class TeleOp extends LinearOpMode {
 
             move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
 
-            if(gamepad1.right_bumper){ // intake motor control
-                intake.setPower(1);
-            }else{
-                intake.setPower(0);
-            }
-
             if(gamepad1.left_bumper){ // spinner motor control
                 spinner.setPower(.65);
             }else{
@@ -65,19 +57,35 @@ public class TeleOp extends LinearOpMode {
             }
 
             if(gamepad2.dpad_down) {
-                OuttakelowerPos(telemetry,gamepad1);
+                setOuttakePos(telemetry, gamepad1, -950);
             }
 
             if(gamepad2.dpad_right){
-                OuttakemiddlePos(telemetry, gamepad1);
+                setOuttakePos(telemetry, gamepad1, -1400);
             }
 
             if(gamepad2.dpad_up){
-                OuttakeUpperPos(telemetry, gamepad1);
+                setOuttakePos(telemetry, gamepad1, -2050);
             }
 
-            if(gamepad1.b){
-                OuttakelowerPos(telemetry,gamepad1);
+            if(gamepad2.b){
+                load++;
+                if(load % 2 == 0){
+                    LoadingPos(telemetry,gamepad1);
+                } else{
+                    bucketServo.setPosition(.4);
+                    transferPos(telemetry,gamepad1);
+                }
+            }
+            if(trackMotor.getCurrentPosition() > -800) {
+                bucketServo.setPosition(.12);
+            }  else if(!gamepad2.a){bucketServo.setPosition(.5);}
+            if(gamepad2.a){
+                bucketServo.setPosition(1);
+            }
+
+            if(trackMotor.getCurrentPosition() < -2151) {
+                trackMotor.setPower(.1 * gamepad2.left_stick_y);
             }
         }
     }
@@ -96,90 +104,63 @@ public class TeleOp extends LinearOpMode {
         BR.setPower(backRightPower);
     }
 
-    private static void OuttakelowerPos(Telemetry telemetry, Gamepad gamepad1){
-         trackMotor.setTargetPosition(500); //get this for the lower position tick amount
+    private static void setOuttakePos(Telemetry telemetry, Gamepad gamepad, int position){
+        trackMotor.setTargetPosition(position); //get this for the lower position tick amount
 
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        trackMotor.setPower(.1); // adjust this low for testing
+        trackMotor.setPower(.65); // adjust this low for testing
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed); this call might need to be here since nested for loops so the main while loop might stop meaning that there wont be any control of the robot
+            move(gamepad.left_stick_x, -gamepad.left_stick_y, gamepad.right_stick_x, speed);
             telemetry.update();
-        }
-
-        trackMotor.setPower(0);
-    }
-
-    private static void OuttakemiddlePos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setTargetPosition(1000);
-
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-          //get this for the lower position tick amount
-
-        trackMotor.setPower(.2); // adjust this low for testing
-
-        while (trackMotor.isBusy()){
-            telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
-            telemetry.update();
-        }
-
-        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        trackMotor.setPower(0);
-    }
-
-    private static void OuttakeUpperPos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setTargetPosition(2150); //get this for the lower position tick amount
-
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        trackMotor.setPower(.2); // adjust this low for testing
-
-        while (trackMotor.isBusy()){
-            telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);\
-            telemetry.update();
+            if(trackMotor.getCurrentPosition() > -800) {
+                bucketServo.setPosition(.15);
+            } else{
+                bucketServo.setPosition(.5);
+            }
         }
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);
     }
 
     private static void LoadingPos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setTargetPosition(2000);
+        trackMotor.setTargetPosition(-1);
 
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        trackMotor.setPower(.2);
+        trackMotor.setPower(.3);
 
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+            move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
             //bucketServo.setPosition(horizontal);
             telemetry.update();
-
+            if(trackMotor.getCurrentPosition() > -800) {
+                bucketServo.setPosition(.15);
+            } else{bucketServo.setPosition(.5);}
         }
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);
     }
 
     private static void transferPos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setTargetPosition(200);
+        trackMotor.setTargetPosition(-855);
 
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        trackMotor.setPower(.2);
+        trackMotor.setPower(.65);
 
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
-            // bucketServo.setPosition(upright);
             telemetry.update();
+            if(trackMotor.getCurrentPosition() > -800) {
+                bucketServo.setPosition(.3);
+            }
         }
         trackMotor.setPower(0);
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
