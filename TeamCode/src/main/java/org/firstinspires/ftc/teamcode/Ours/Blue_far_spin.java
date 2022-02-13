@@ -65,17 +65,9 @@ public class Blue_far_spin extends LinearOpMode {
 
         TrajectorySequence trajSeq1 = drive.trajectorySequenceBuilder(startPos)
                 .forward(3)
-                .lineToSplineHeading(new Pose2d(2,37,Math.toRadians(225)))
+                .lineToSplineHeading(new Pose2d(2,37,Math.toRadians(45)))
                 .build();
         drive.followTrajectorySequence(trajSeq1);
-        spinner.setPower(.65);
-        sleep(3000);
-        spinner.setPower(0);
-
-        TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                .lineToSplineHeading(new Pose2d(-24, 37, Math.toRadians(145)))
-                .build();
-        drive.followTrajectorySequence(trajSeq2);
 
         if (cupPos == 0) {
             setOuttakePos(telemetry, -950, .70);
@@ -91,8 +83,19 @@ public class Blue_far_spin extends LinearOpMode {
         bucketServo.setPosition(.5);
 
         setOuttakePos(telemetry, -855, .70);
-        TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+
+        TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .forward(10)
+                .lineToLinearHeading(new Pose2d(-55,55,Math.toRadians(90)))
+                .build();
+        drive.followTrajectorySequence(trajSeq2);
+
+        spinner.setPower(.65);
+        sleep(3000);
+        spinner.setPower(0);
+
+        TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+
                 .lineToLinearHeading(new Pose2d(-60, 35, Math.toRadians(0)))
                 .build();
 

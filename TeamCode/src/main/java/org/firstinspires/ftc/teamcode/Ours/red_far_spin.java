@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "red_spin_far")
+@Autonomous(name = "Blue_spin_far")
 public class red_far_spin extends LinearOpMode {
     Pose2d startPos = new Pose2d(12, -62, Math.toRadians(90));
     static DcMotor spinner;
@@ -23,6 +24,7 @@ public class red_far_spin extends LinearOpMode {
     static DcMotor trackMotor;
     OpenCvCamera webcam; // webcam object
     CupDetector detector = new CupDetector(telemetry);
+    static int cupPos = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,7 +41,7 @@ public class red_far_spin extends LinearOpMode {
             @Override
             public void onError(int errorCode) {
 
-                telemetry.addData("failed to open camera setting position to ",detector.getCupPosition());
+                telemetry.addData("failed to open camera setting position to ", detector);
             }
 
         });
@@ -49,101 +51,74 @@ public class red_far_spin extends LinearOpMode {
         spinner = hardwareMap.get(DcMotor.class, "SpinnerMotor");
         trackMotor = hardwareMap.get(DcMotor.class, "TrackMotor");
         bucketServo = hardwareMap.servo.get("BucketServo");
-        trackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        while(!opModeIsActive() && !isStopRequested()){
+        trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setOuttakePos(telemetry, -855, .70);
+        while (!opModeIsActive() && !isStopRequested()) {
             //bucketServo.setPosition(upright);
-            int pos = detector.getCupPosition(); // gets the pos of the duck
-            telemetry.addData("duck pos", pos);
+            cupPos = detector.getCupPosition(); // gets the pos of the duck
+            telemetry.addData("duck pos", cupPos);
             telemetry.update();
             sleep(100);
         }
         waitForStart();
-        trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        int snapshot = detector.getCupPosition();
-        telemetry.addData("snapshot analysis", snapshot);
 
-        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPos)
+        TrajectorySequence trajSeq1 = drive.trajectorySequenceBuilder(startPos)
                 .forward(3)
-                .lineToSplineHeading(new Pose2d(2,-37,Math.toRadians(135)))
-                .addTemporalMarker(()->{
-                    if(snapshot == 0){
-                        OuttakelowerPos(telemetry);
-                        //bucketServo.setPosition(dump);
-                    } else if (snapshot == 1) {
-                        OuttakemiddlePos(telemetry);
-                        //bucketServo.setPosition(dump);
-                    } else {
-                        OuttakeUpperPos(telemetry);
-                        //bucketServo.setPosition(dump);
-                    }
-                    transferPos(telemetry);
-                })
-                .back(10)
+                .lineToSplineHeading(new Pose2d(2,-37,Math.toRadians(315)))
+                .build();
+        drive.followTrajectorySequence(trajSeq1);
+
+        if (cupPos == 0) {
+            setOuttakePos(telemetry, -950, .70);
+        }
+        if (cupPos == 1) {
+            setOuttakePos(telemetry, -1400, .70);
+        }
+        if(cupPos == 2) {
+            setOuttakePos(telemetry, -2050, .70);
+        }
+        bucketServo.setPosition(.90);
+        sleep(2000);
+        bucketServo.setPosition(.5);
+
+        setOuttakePos(telemetry, -855, .70);
+
+        TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .forward(10)
                 .lineToLinearHeading(new Pose2d(-55,-55,Math.toRadians(180)))
-                .addDisplacementMarker(() -> {
-                    spinner.setPower(.65);
-                    sleep(5000);
-                })
+                .build();
+        drive.followTrajectorySequence(trajSeq2);
+
+        spinner.setPower(.65);
+        sleep(3000);
+        spinner.setPower(0);
+
+        TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
+                .back(10)
                 .lineToLinearHeading(new Pose2d(-60,-35,Math.toRadians(0)))
                 .build();
 
-        drive.followTrajectorySequence(trajSeq);
+        drive.followTrajectorySequence(trajSeq3);
     }
 
-    private static void OuttakelowerPos(Telemetry telemetry){
+    private void setOuttakePos(Telemetry telemetry, int position, double speed){
+        trackMotor.setTargetPosition(position); //get this for the lower position tick amount
+
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
-
-        trackMotor.setPower(.1); // adjust this low for testing
+        trackMotor.setPower(speed); // adjust this low for testing
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
+            telemetry.update();
+            if(trackMotor.getCurrentPosition() > -800) {
+                bucketServo.setPosition(.11);
+            } else{
+                bucketServo.setPosition(.5);
+            }
         }
-
+        trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);
-    }
-
-    private static void OuttakemiddlePos(Telemetry telemetry){
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
-
-        trackMotor.setPower(.1); // adjust this low for testing
-
-        while (trackMotor.isBusy()){
-            telemetry.addData("current pos", trackMotor.getCurrentPosition());
-        }
-
-        trackMotor.setPower(0);
-    }
-
-    private static void OuttakeUpperPos(Telemetry telemetry){
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // trackMotor.setTargetPosition(???); get this for the lower position tick amount
-
-        trackMotor.setPower(.1); // adjust this low for testing
-
-        while (trackMotor.isBusy()){
-            telemetry.addData("current pos", trackMotor.getCurrentPosition());
-        }
-
-        trackMotor.setPower(0);
-    }
-
-    private static void transferPos(Telemetry telemetry){
-        trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        trackMotor.setTargetPosition(0);
-
-        trackMotor.setPower(.1);
-
-
-        while (trackMotor.isBusy()){
-            telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            // bucketServo.setPosition(upright);
-        }
     }
 }

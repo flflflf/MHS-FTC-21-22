@@ -14,17 +14,17 @@ public class red_far_to_spin {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(12, -62, Math.toRadians(90)))
                                 .forward(3)
-                                .lineToSplineHeading(new Pose2d(2,-37,Math.toRadians(135)))
+                                .lineToSplineHeading(new Pose2d(2,-37,Math.toRadians(315)))
                                 .addTemporalMarker(()->{
                                     //put the item to the right height
                                 })
-                                .back(10)
+                                .forward(10)
                                 .lineToLinearHeading(new Pose2d(-55,-55,Math.toRadians(180)))
                                 .addDisplacementMarker(() -> {
                                     //spin the thing
                                 })
 
-
+                                .back(10)
                                 .lineToLinearHeading(new Pose2d(-60,-35,Math.toRadians(0)))
                                 .build()
                         );
