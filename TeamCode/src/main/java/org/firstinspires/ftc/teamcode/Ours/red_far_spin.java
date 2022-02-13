@@ -86,7 +86,7 @@ public class red_far_spin extends LinearOpMode {
 
         TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .forward(10)
-                .lineToLinearHeading(new Pose2d(-55,-55,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-57,-55,Math.toRadians(180)))
                 .build();
         drive.followTrajectorySequence(trajSeq2);
 

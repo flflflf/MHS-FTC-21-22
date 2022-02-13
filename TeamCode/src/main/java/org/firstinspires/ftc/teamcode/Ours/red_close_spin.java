@@ -65,7 +65,7 @@ public class red_close_spin extends LinearOpMode {
 
         TrajectorySequence trajSeq1 = drive.trajectorySequenceBuilder(startPos)
                 .forward(3)
-                .lineToLinearHeading(new Pose2d(-55,-55,Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-57,-55,Math.toRadians(180)))
                 .build();
         drive.followTrajectorySequence(trajSeq1);
         spinner.setPower(.65);
