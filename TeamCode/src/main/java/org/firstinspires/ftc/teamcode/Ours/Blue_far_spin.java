@@ -53,7 +53,7 @@ public class Blue_far_spin extends LinearOpMode {
         bucketServo = hardwareMap.servo.get("BucketServo");
         trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setOuttakePos(telemetry, -855, .70);
+        setOuttakePos(telemetry, -10, .70);
         while (!opModeIsActive() && !isStopRequested()) {
             //bucketServo.setPosition(upright);
             cupPos = detector.getCupPosition(); // gets the pos of the duck

@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Blue_spin_far")
+@Autonomous(name = "red_spin_far")
 public class red_far_spin extends LinearOpMode {
     Pose2d startPos = new Pose2d(12, -62, Math.toRadians(90));
     static DcMotor spinner;
@@ -53,7 +53,7 @@ public class red_far_spin extends LinearOpMode {
         bucketServo = hardwareMap.servo.get("BucketServo");
         trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setOuttakePos(telemetry, -855, .70);
+        setOuttakePos(telemetry, -10, .70);
         while (!opModeIsActive() && !isStopRequested()) {
             //bucketServo.setPosition(upright);
             cupPos = detector.getCupPosition(); // gets the pos of the duck

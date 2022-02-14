@@ -53,7 +53,7 @@ public class Blue_close_spin extends LinearOpMode {
         bucketServo = hardwareMap.servo.get("BucketServo");
         trackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setOuttakePos(telemetry, -855, .70);
+        bucketServo.setPosition(.5);
         while (!opModeIsActive() && !isStopRequested()) {
             //bucketServo.setPosition(upright);
            cupPos = detector.getCupPosition(); // gets the pos of the duck
@@ -62,35 +62,35 @@ public class Blue_close_spin extends LinearOpMode {
             sleep(100);
         }
         waitForStart();
+        if (cupPos == 0) {
+            setOuttakePos(telemetry, -950, .70);
 
+        }
+        if (cupPos == 1) {
+            setOuttakePos(telemetry, -1600, .70);
+
+        }
+        if(cupPos == 2) {
+            setOuttakePos(telemetry, -2050, .70);
+
+        }
         TrajectorySequence trajSeq1 = drive.trajectorySequenceBuilder(startPos)
-                .forward(3)
-                .lineToLinearHeading(new Pose2d(-60, 55, Math.toRadians(90)))
-                .build();
-                drive.followTrajectorySequence(trajSeq1);
-                    spinner.setPower(.65);
-                    sleep(3000);
-                spinner.setPower(0);
+        .forward(3)
+        .lineToLinearHeading(new Pose2d(-60, 55, Math.toRadians(90)))
+        .build();
+        drive.followTrajectorySequence(trajSeq1);
+        spinner.setPower(.30);
+        sleep(4000);
+        spinner.setPower(0);
 
     TrajectorySequence trajSeq2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
             .lineToSplineHeading(new Pose2d(-24, 37, Math.toRadians(145)))
                 .build();
             drive.followTrajectorySequence(trajSeq2);
-
-            if (cupPos == 0) {
-                setOuttakePos(telemetry, -950, .70);
-            }
-            if (cupPos == 1) {
-                setOuttakePos(telemetry, -1400, .70);
-            }
-            if(cupPos == 2) {
-                setOuttakePos(telemetry, -2050, .70);
-            }
-            bucketServo.setPosition(1);
-            sleep(2000);
-            bucketServo.setPosition(.5);
-
-            setOuttakePos(telemetry, -855, .70);
+        bucketServo.setPosition(1);
+        sleep(2000);
+        bucketServo.setPosition(.15);
+        setOuttakePos(telemetry,-500,.7);
         TrajectorySequence trajSeq3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                 .forward(5)
                 .lineToLinearHeading(new Pose2d(-60, 35, Math.toRadians(0)))
@@ -109,11 +109,7 @@ public class Blue_close_spin extends LinearOpMode {
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             telemetry.update();
-            if(trackMotor.getCurrentPosition() > -800) {
-                bucketServo.setPosition(.11);
-            } else{
-                bucketServo.setPosition(.5);
-            }
+
         }
         trackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         trackMotor.setPower(0);

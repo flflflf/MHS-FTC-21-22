@@ -35,7 +35,7 @@ public class TeleOp extends LinearOpMode {
         FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
@@ -51,17 +51,24 @@ public class TeleOp extends LinearOpMode {
             move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
 
             if(gamepad1.left_bumper){ // spinner motor control
-                spinner.setPower(.65);
-            }else{
+                spinner.setPower(.45);
+            } else if(!gamepad1.right_bumper){
                 spinner.setPower(0);
             }
 
+            if(gamepad1.right_bumper) {
+                spinner.setPower(-.45);
+            } else if (!gamepad1.left_bumper){
+                spinner.setPower(0);
+            }
+
+
             if(gamepad2.dpad_down) {
-                setOuttakePos(telemetry, gamepad1, -950);
+                setOuttakePos(telemetry, gamepad1, -920);
             }
 
             if(gamepad2.dpad_right){
-                setOuttakePos(telemetry, gamepad1, -1400);
+                setOuttakePos(telemetry, gamepad1, -1600);
             }
 
             if(gamepad2.dpad_up){
@@ -77,14 +84,14 @@ public class TeleOp extends LinearOpMode {
                     transferPos(telemetry,gamepad1);
                 }
             }
-            if(trackMotor.getCurrentPosition() > -800) {
+            if(trackMotor.getCurrentPosition() > -900) {
                 bucketServo.setPosition(.12);
             }  else if(!gamepad2.a){bucketServo.setPosition(.5);}
             if(gamepad2.a){
                 bucketServo.setPosition(1);
             }
 
-            if(trackMotor.getCurrentPosition() < -2151) {
+            if(trackMotor.getCurrentPosition() > -2151) {
                 trackMotor.setPower(.1 * gamepad2.left_stick_y);
             }
         }
@@ -115,7 +122,7 @@ public class TeleOp extends LinearOpMode {
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
             move(gamepad.left_stick_x, -gamepad.left_stick_y, gamepad.right_stick_x, speed);
             telemetry.update();
-            if(trackMotor.getCurrentPosition() > -800) {
+            if(trackMotor.getCurrentPosition() > -900) {
                 bucketServo.setPosition(.15);
             } else{
                 bucketServo.setPosition(.5);
@@ -138,7 +145,7 @@ public class TeleOp extends LinearOpMode {
             move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
             //bucketServo.setPosition(horizontal);
             telemetry.update();
-            if(trackMotor.getCurrentPosition() > -800) {
+            if(trackMotor.getCurrentPosition() > -900) {
                 bucketServo.setPosition(.15);
             } else{bucketServo.setPosition(.5);}
         }
@@ -147,7 +154,7 @@ public class TeleOp extends LinearOpMode {
     }
 
     private static void transferPos(Telemetry telemetry, Gamepad gamepad1){
-        trackMotor.setTargetPosition(-855);
+        trackMotor.setTargetPosition(-910);
 
         trackMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -156,9 +163,9 @@ public class TeleOp extends LinearOpMode {
 
         while (trackMotor.isBusy()){
             telemetry.addData("current pos", trackMotor.getCurrentPosition());
-            //move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+            move(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
             telemetry.update();
-            if(trackMotor.getCurrentPosition() > -800) {
+            if(trackMotor.getCurrentPosition() > -900) {
                 bucketServo.setPosition(.3);
             }
         }
